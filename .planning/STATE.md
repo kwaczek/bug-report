@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 1 of 4 (Widget)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-01 — Roadmap created + integration-checked + fixed
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-03-01 — Completed 01-01 widget scaffold and types
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 8%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 2 min
+- Total execution time: ~0.03 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-widget | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: -
+- Last 5 plans: 01-01 (2 min)
 - Trend: -
 
 *Updated after each plan completion*
@@ -46,6 +46,8 @@ Recent decisions affecting current work:
 - Image hosting: ImgBB for MVP (simpler, fewer GitHub token scopes; switch to Contents API in v1.x if needed)
 - Telegram library: telegraf 4.16.3 (better TypeScript types vs grammY)
 - Local relay exposure: Cloudflare Tunnel preferred over ngrok (stable, free, permanent URL)
+- Widget CSS: Use ?inline Vite import instead of vite-plugin-css-injected-by-js (simpler, avoids plugin complexity)
+- Widget types: SubmitArgs and SubmitResult defined upfront in types.ts to establish full submission contract early
 
 ### Pending Todos
 
@@ -60,5 +62,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Project initialization complete — roadmap created, integration-checked, fixes applied. Ready to plan Phase 1.
+Stopped at: Completed 01-01-PLAN.md — widget scaffold (package.json, tsconfig.json, vite.config.ts, types.ts, metadata.ts)
 Resume file: None

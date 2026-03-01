@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold widget package, Vite IIFE config, shared TypeScript types, and metadata collection
+- [x] 01-01-PLAN.md — Scaffold widget package, Vite IIFE config, shared TypeScript types, and metadata collection
 - [ ] 01-02-PLAN.md — Core widget: Shadow DOM init, floating button, form UI, screenshot capture, upload/paste handler
 - [ ] 01-03-PLAN.md — FormData submission module, production build, and browser verification checkpoint
 
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Widget | 3 plans | Not started | - |
+| 1. Widget | 1/3 plans | In progress | - |
 | 2. Backend + Triage | TBD | Not started | - |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |
