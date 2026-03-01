@@ -1,37 +1,58 @@
 export interface UploadHandler {
   getImages(): Blob[];
   clear(): void;
-  attachTo(shadowRoot: ShadowRoot, fileInput: HTMLInputElement): void;
+  attachTo(fileInput: HTMLInputElement, onUpdate: () => void): void;
+  detach(): void;
 }
 
 export function createUploadHandler(): UploadHandler {
   const images: Blob[] = [];
+  let pasteHandler: ((e: Event) => void) | null = null;
 
   return {
     getImages: () => [...images],
     clear: () => { images.length = 0; },
-    attachTo(shadowRoot: ShadowRoot, fileInput: HTMLInputElement) {
+    detach() {
+      if (pasteHandler) {
+        document.removeEventListener('paste', pasteHandler);
+        pasteHandler = null;
+      }
+    },
+    attachTo(fileInput: HTMLInputElement, onUpdate: () => void) {
       fileInput.addEventListener('change', (e) => {
         const files = (e.target as HTMLInputElement).files;
         if (files) {
           Array.from(files).forEach((file) => images.push(file));
         }
+        onUpdate();
       });
 
-      // Paste handler — use event.clipboardData.items (no permission needed, user-initiated)
-      // Do NOT use the Clipboard API's read() method — it triggers a browser permission popup
-      // multiple images are supported: each paste/file event can add more blobs
-      shadowRoot.addEventListener('paste', (e: Event) => {
+      // Remove previous paste handler if any
+      if (pasteHandler) {
+        document.removeEventListener('paste', pasteHandler);
+      }
+
+      // Paste handler on document — shadow root doesn't receive paste events
+      // Uses event.clipboardData.items (no permission popup, user-initiated)
+      pasteHandler = (e: Event) => {
         const clipboardEvent = e as ClipboardEvent;
-        clipboardEvent.preventDefault();
         const items = clipboardEvent.clipboardData?.items ?? [];
+        let added = false;
         for (const item of Array.from(items)) {
           if (item.type.startsWith('image/')) {
             const blob = item.getAsFile();
-            if (blob) images.push(blob);
+            if (blob) {
+              images.push(blob);
+              added = true;
+            }
           }
         }
-      });
+        if (added) {
+          clipboardEvent.preventDefault();
+          onUpdate();
+        }
+      };
+      document.addEventListener('paste', pasteHandler);
     },
   };
 }

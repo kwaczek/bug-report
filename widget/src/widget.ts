@@ -156,8 +156,11 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
     uploadField.appendChild(attachedCount);
     panel.appendChild(uploadField);
 
-    // Wire upload and paste to this render's file input
-    uploadHandler.attachTo(shadowRoot, fileInput);
+    // Wire upload and paste — onUpdate refreshes the attached count display
+    uploadHandler.attachTo(fileInput, () => {
+      const count = uploadHandler.getImages().length;
+      attachedCount.textContent = count > 0 ? `${count} image(s) attached` : '';
+    });
 
     // Actions
     const actions = el('div', { className: 'brw-actions' });
@@ -206,6 +209,7 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
   function closeModal(): void {
     state = 'idle';
     overlay.setAttribute('hidden', '');
+    uploadHandler.detach();
     uploadHandler.clear();
     autoScreenshot = null;
   }
