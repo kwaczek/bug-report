@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-last_updated: "2026-03-01T18:57:40Z"
+last_updated: "2026-03-01T19:03:00Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 2 of 4 (Backend + Triage) — IN PROGRESS
-Plan: 1 of 3 in current phase — COMPLETE
-Status: 02-01 complete — ready for 02-02 (report route, multer, rate limiter)
-Last activity: 2026-03-01 — Completed 02-01 Express 5 backend scaffold, shared types, health endpoint
+Plan: 2 of 3 in current phase — COMPLETE
+Status: 02-02 complete — ready for 02-03 (report route, multer, rate limiter, webhook)
+Last activity: 2026-03-01 — Completed 02-02 service modules: ImgBB upload, Anthropic triage, GitHub issue creation
 
-Progress: [████░░░░░░] 28%
+Progress: [█████░░░░░] 42%
 
 ## Performance Metrics
 
@@ -41,10 +41,10 @@ Progress: [████░░░░░░] 28%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-widget | 3 | 25 min | 8.3 min |
-| 02-backend-triage | 1 | 2 min | 2 min |
+| 02-backend-triage | 2 | 4 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 01-03 (20 min), 02-01 (2 min)
+- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 01-03 (20 min), 02-01 (2 min), 02-02 (2 min)
 - Trend: stable (01-03 longer due to human verification checkpoint)
 
 *Updated after each plan completion*
@@ -73,6 +73,10 @@ Recent decisions affecting current work:
 - loadProjectsFromEnv() parses PROJECT_MAP env var at startup — no config files checked in, Railway-friendly
 - trust proxy: 1 set at app creation time (not per-route) — Railway always behind reverse proxy
 - Health route mounted before all other middleware — available even if other middleware setup fails
+- triageReport() uses messages.create() + zod.safeParse() — SDK 0.39.0 lacks messages.parse()/zodOutputFormat
+- uploadScreenshots() uses Promise.allSettled so one failed upload cannot block the bug report
+- ensureLabelsExist() catches 422 per label independently — idempotent, safe to call at startup
+- buildIssueBody() is a pure function separate from createGitHubIssue() for testability
 
 ### Pending Todos
 
@@ -87,5 +91,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 02-01-PLAN.md — Express 5 backend scaffold complete. backend/src/types.ts, config.ts, app.ts, index.ts, routes/health.ts. Ready for 02-02 (report route).
+Stopped at: Completed 02-02-PLAN.md — Service modules complete. backend/src/services/imgbb.ts, triage.ts, github.ts. Ready for 02-03 (report route, multer, webhook).
 Resume file: None

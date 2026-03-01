@@ -20,20 +20,20 @@
 ### Backend
 
 - [x] **BACK-01**: Express 5 service receives bug reports at POST /report
-- [ ] **BACK-02**: Service uploads screenshots to ImgBB and embeds permanent URLs in issue body
+- [x] **BACK-02**: Service uploads screenshots to ImgBB and embeds permanent URLs in issue body
 - [ ] **BACK-03**: Service rate-limits by IP (10 reports/IP/hour minimum)
 - [x] **BACK-04**: Service maps project IDs to GitHub repos for correct issue routing
-- [ ] **BACK-05**: Service creates GitHub issues via Octokit with labels, screenshots, and metadata
+- [x] **BACK-05**: Service creates GitHub issues via Octokit with labels, screenshots, and metadata
 - [ ] **BACK-06**: Service registers and handles GitHub webhooks with HMAC signature verification
 - [x] **BACK-07**: Service deploys to Railway with always-on configuration
 - [x] **BACK-08**: Zero GitHub API calls originate from the browser — all through backend proxy
 
 ### Triage
 
-- [ ] **TRIA-01**: AI triage runs pre-issue — before GitHub issue creation, not after
-- [ ] **TRIA-02**: Triage produces three-lane output: auto-fix (>0.8), review (0.4-0.8), spam (<0.4)
-- [ ] **TRIA-03**: Spam reports are discarded without creating a GitHub issue
-- [ ] **TRIA-04**: Valid and uncertain reports create GitHub issues with triage labels
+- [x] **TRIA-01**: AI triage runs pre-issue — before GitHub issue creation, not after
+- [x] **TRIA-02**: Triage produces three-lane output: auto-fix (>0.8), review (0.4-0.8), spam (<0.4)
+- [x] **TRIA-03**: Spam reports are discarded without creating a GitHub issue
+- [x] **TRIA-04**: Valid and uncertain reports create GitHub issues with triage labels
 - [ ] **TRIA-05**: All triage decisions are logged with model reasoning
 
 ### Ralph Integration
@@ -97,17 +97,17 @@
 | WIDG-08 | Phase 1 | Complete |
 | WIDG-09 | Phase 1 | Complete |
 | BACK-01 | Phase 2 | Complete (02-01) |
-| BACK-02 | Phase 2 | Pending |
+| BACK-02 | Phase 2 | Complete |
 | BACK-03 | Phase 2 | Pending |
 | BACK-04 | Phase 2 | Complete (02-01) |
-| BACK-05 | Phase 2 | Pending |
+| BACK-05 | Phase 2 | Complete |
 | BACK-06 | Phase 2 | Pending |
 | BACK-07 | Phase 2 | Complete (02-01) |
 | BACK-08 | Phase 2 | Complete (02-01) |
-| TRIA-01 | Phase 2 | Pending |
-| TRIA-02 | Phase 2 | Pending |
-| TRIA-03 | Phase 2 | Pending |
-| TRIA-04 | Phase 2 | Pending |
+| TRIA-01 | Phase 2 | Complete |
+| TRIA-02 | Phase 2 | Complete |
+| TRIA-03 | Phase 2 | Complete |
+| TRIA-04 | Phase 2 | Complete |
 | TRIA-05 | Phase 3 | Pending |
 | RALF-01 | Phase 3 | Pending |
 | RALF-02 | Phase 3 | Pending |

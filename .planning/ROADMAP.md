@@ -91,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
-| 2. Backend + Triage | 1/3 plans | In progress | - |
+| 2. Backend + Triage | 2/3 | In Progress|  |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |
