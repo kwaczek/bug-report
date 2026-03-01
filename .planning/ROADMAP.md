@@ -13,7 +13,7 @@ Four phases deliver a fully automated bug-to-fix pipeline. The widget ships firs
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Widget** - Embeddable script-tag widget with screenshot capture, Shadow DOM isolation, and graceful failure
-- [ ] **Phase 2: Backend + Triage** - Express 5 service on Railway with pre-issue AI triage, rate-limiting, and conditional GitHub issue creation
+- [x] **Phase 2: Backend + Triage** - Express 5 service on Railway with pre-issue AI triage, rate-limiting, and conditional GitHub issue creation (completed 2026-03-01)
 - [ ] **Phase 3: Ralph Integration** - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring
 - [ ] **Phase 4: Telegram** - Human-in-the-loop approve/reject flow for uncertain triage verdicts
 
@@ -91,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
-| 2. Backend + Triage | 2/3 | In Progress|  |
+| 2. Backend + Triage | 3/3 | Complete   | 2026-03-01 |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |
