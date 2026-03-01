@@ -51,12 +51,13 @@ Plans:
   - Widget POSTs to `/report` with `{ projectId, subject, description, url, screenshots[], metadata }` — returns `{ success: boolean, message: string }`
   - Webhook handler verifies HMAC signature and responds 200; routing logic (fix plan, Telegram) added in Phase 3/4 via registered event callbacks
   - `PendingApproval { issueId, repo, triageResult, reportData }` interface defined here, consumed by Phase 4
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 02-01-PLAN.md — Scaffold backend package, Express 5 app factory, shared TypeScript types, project config, health endpoint
-- [ ] 02-02-PLAN.md — ImgBB upload service, Anthropic AI triage service, GitHub issue creation service
-- [ ] 02-03-PLAN.md — POST /report route handler, rate limiting, webhook HMAC middleware, full app wiring
+- [x] 02-02-PLAN.md — ImgBB upload service, Anthropic AI triage service, GitHub issue creation service
+- [x] 02-03-PLAN.md — POST /report route handler, rate limiting, webhook HMAC middleware, full app wiring
+- [ ] 02-04-PLAN.md — Gap closure: Railway deployment config (railway.toml) for BACK-07
 
 ### Phase 3: Ralph Integration
 **Goal**: GitHub webhook events for auto-fix issues trigger fix_plan.md generation and Ralph execution via a local relay server; triage decisions are logged; the pipeline is idempotent
@@ -91,6 +92,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
-| 2. Backend + Triage | 3/3 | Complete   | 2026-03-01 |
+| 2. Backend + Triage | 3/4 | Gap closure | 2026-03-01 |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |
