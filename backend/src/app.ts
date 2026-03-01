@@ -15,7 +15,19 @@ export function createApp() {
   app.set("trust proxy", 1);
 
   // 0. Static files — serve widget.js from /public
-  app.use(express.static(path.join(process.cwd(), "public")));
+  const publicDir = path.join(process.cwd(), "public");
+  app.get("/debug-path", (_, res) => {
+    const fs = require("fs");
+    res.json({
+      cwd: process.cwd(),
+      dirname: __dirname,
+      publicDir,
+      publicExists: fs.existsSync(publicDir),
+      publicFiles: fs.existsSync(publicDir) ? fs.readdirSync(publicDir) : [],
+      rootFiles: fs.readdirSync(process.cwd()),
+    });
+  });
+  app.use(express.static(publicDir));
 
   // 1. Health check — always available, no middleware dependencies
   app.use("/health", healthRouter);
