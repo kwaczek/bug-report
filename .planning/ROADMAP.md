@@ -2,7 +2,7 @@
 
 ## Overview
 
-Four phases deliver a fully automated bug-to-fix pipeline. The widget ships first — it has zero external dependencies and can be verified in isolation. Phase 2 combines the backend service with AI triage (pre-issue triage must live in the same handler as issue creation). Phase 3 wires the Ralph auto-fix pipeline via a local relay server. Phase 4 adds the Telegram human-in-the-loop for uncertain cases. Every v1 requirement lands in exactly one phase; nothing is deferred.
+Two phases deliver the core bug report pipeline. The widget ships first — it has zero external dependencies and can be verified in isolation. Phase 2 combines the backend service with AI triage (pre-issue triage must live in the same handler as issue creation). Phases 3 (Ralph auto-fix) and 4 (Telegram approval) are deferred to v2 — v1 focuses on getting widget → triage → GitHub issues working in production first.
 
 ## Phases
 
@@ -14,8 +14,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Widget** - Embeddable script-tag widget with screenshot capture, Shadow DOM isolation, and graceful failure
 - [x] **Phase 2: Backend + Triage** - Express 5 service on Railway with pre-issue AI triage, rate-limiting, and conditional GitHub issue creation (completed 2026-03-01)
-- [ ] **Phase 3: Ralph Integration** - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring
-- [ ] **Phase 4: Telegram** - Human-in-the-loop approve/reject flow for uncertain triage verdicts
+- [ ] **Phase 3: Ralph Integration** *(v2)* - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring
+- [ ] **Phase 4: Telegram** *(v2)* - Human-in-the-loop approve/reject flow for uncertain triage verdicts
 
 ## Phase Details
 
@@ -57,7 +57,7 @@ Plans:
 - [x] 02-01-PLAN.md — Scaffold backend package, Express 5 app factory, shared TypeScript types, project config, health endpoint
 - [x] 02-02-PLAN.md — ImgBB upload service, Anthropic AI triage service, GitHub issue creation service
 - [x] 02-03-PLAN.md — POST /report route handler, rate limiting, webhook HMAC middleware, full app wiring
-- [ ] 02-04-PLAN.md — Gap closure: Railway deployment config (railway.toml) for BACK-07
+- [x] 02-04-PLAN.md — Gap closure: Railway deployment config (railway.toml) for BACK-07
 
 ### Phase 3: Ralph Integration
 **Goal**: GitHub webhook events for auto-fix issues trigger fix_plan.md generation and Ralph execution via a local relay server; triage decisions are logged; the pipeline is idempotent
@@ -92,6 +92,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
-| 2. Backend + Triage | 3/4 | Gap closure | 2026-03-01 |
-| 3. Ralph Integration | TBD | Not started | - |
-| 4. Telegram | TBD | Not started | - |
+| 2. Backend + Triage | 4/4 | Complete | 2026-03-01 |
+| 3. Ralph Integration *(v2)* | TBD | Deferred | - |
+| 4. Telegram *(v2)* | TBD | Deferred | - |
