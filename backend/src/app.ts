@@ -15,7 +15,7 @@ export function createApp() {
   app.set("trust proxy", 1);
 
   // 0. Static files — serve widget.js from /public
-  app.use(express.static(path.join(__dirname, "..", "public")));
+  app.use(express.static(path.join(process.cwd(), "public")));
 
   // 1. Health check — always available, no middleware dependencies
   app.use("/health", healthRouter);
