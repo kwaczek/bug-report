@@ -8,14 +8,14 @@
 ### Widget
 
 - [x] **WIDG-01**: Widget loads via a single `<script>` tag with `data-project-id` attribute
-- [ ] **WIDG-02**: Widget renders a floating bug report button that does not interfere with host page
+- [x] **WIDG-02**: Widget renders a floating bug report button that does not interfere with host page
 - [x] **WIDG-03**: Widget uses Shadow DOM for complete CSS isolation from host page
-- [ ] **WIDG-04**: Widget captures page screenshot via html-to-image with graceful fallback on failure
-- [ ] **WIDG-05**: Widget auto-fills current page URL in the report form
-- [ ] **WIDG-06**: Widget supports multiple screenshots per report (upload + Ctrl+V paste)
+- [x] **WIDG-04**: Widget captures page screenshot via html-to-image with graceful fallback on failure
+- [x] **WIDG-05**: Widget auto-fills current page URL in the report form
+- [x] **WIDG-06**: Widget supports multiple screenshots per report (upload + Ctrl+V paste)
 - [x] **WIDG-07**: Widget collects subject, description, URL, and browser/OS metadata
 - [ ] **WIDG-08**: Widget shows submission confirmation (success/failure) to reporter
-- [ ] **WIDG-09**: Widget fails gracefully — host app is never affected by widget errors
+- [x] **WIDG-09**: Widget fails gracefully — host app is never affected by widget errors
 
 ### Backend
 
@@ -88,14 +88,14 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | WIDG-01 | Phase 1 | Complete |
-| WIDG-02 | Phase 1 | Pending |
+| WIDG-02 | Phase 1 | Complete |
 | WIDG-03 | Phase 1 | Complete |
-| WIDG-04 | Phase 1 | Pending |
-| WIDG-05 | Phase 1 | Pending |
-| WIDG-06 | Phase 1 | Pending |
+| WIDG-04 | Phase 1 | Complete |
+| WIDG-05 | Phase 1 | Complete |
+| WIDG-06 | Phase 1 | Complete |
 | WIDG-07 | Phase 1 | Complete |
 | WIDG-08 | Phase 1 | Pending |
-| WIDG-09 | Phase 1 | Pending |
+| WIDG-09 | Phase 1 | Complete |
 | BACK-01 | Phase 2 | Pending |
 | BACK-02 | Phase 2 | Pending |
 | BACK-03 | Phase 2 | Pending |

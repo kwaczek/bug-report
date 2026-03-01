@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 1 of 4 (Widget)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-03-01 — Completed 01-01 widget scaffold and types
+Last activity: 2026-03-01 — Completed 01-02 core widget modules (index.ts, widget.ts, screenshot.ts, upload.ts, widget.css)
 
-Progress: [█░░░░░░░░░] 8%
+Progress: [██░░░░░░░░] 17%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: ~0.03 hours
+- Total plans completed: 2
+- Average duration: 2.5 min
+- Total execution time: ~0.08 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-widget | 1 | 2 min | 2 min |
+| 01-widget | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min)
-- Trend: -
+- Last 5 plans: 01-01 (2 min), 01-02 (3 min)
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -48,6 +48,9 @@ Recent decisions affecting current work:
 - Local relay exposure: Cloudflare Tunnel preferred over ngrok (stable, free, permanent URL)
 - Widget CSS: Use ?inline Vite import instead of vite-plugin-css-injected-by-js (simpler, avoids plugin complexity)
 - Widget types: SubmitArgs and SubmitResult defined upfront in types.ts to establish full submission contract early
+- document.currentScript captured synchronously at module scope before async IIFE — becomes null after script execution
+- submit.ts placeholder stub created in plan 02 so widget.ts dynamic import type-checks before plan 03 implements the real module
+- Shadow host dimensions 0x0, floating button positions itself via fixed CSS inside shadow root — no layout impact on host page
 
 ### Pending Todos
 
@@ -62,5 +65,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 01-01-PLAN.md — widget scaffold (package.json, tsconfig.json, vite.config.ts, types.ts, metadata.ts)
+Stopped at: Completed 01-02-PLAN.md — core widget modules (index.ts, widget.ts, screenshot.ts, upload.ts, widget.css, vite.d.ts, submit.ts stub)
 Resume file: None
