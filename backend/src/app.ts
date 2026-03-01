@@ -1,12 +1,9 @@
 import path from "path";
-import { fileURLToPath } from "url";
 import express from "express";
 import { healthRouter } from "./routes/health.js";
 import { reportRouter } from "./routes/report.js";
 import { reportLimiter } from "./middleware/rateLimit.js";
 import { webhookMiddleware } from "./middleware/webhook.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp() {
   const app = express();
@@ -15,19 +12,7 @@ export function createApp() {
   app.set("trust proxy", 1);
 
   // 0. Static files — serve widget.js from /public
-  const publicDir = path.join(process.cwd(), "public");
-  app.get("/debug-path", (_, res) => {
-    const fs = require("fs");
-    res.json({
-      cwd: process.cwd(),
-      dirname: __dirname,
-      publicDir,
-      publicExists: fs.existsSync(publicDir),
-      publicFiles: fs.existsSync(publicDir) ? fs.readdirSync(publicDir) : [],
-      rootFiles: fs.readdirSync(process.cwd()),
-    });
-  });
-  app.use(express.static(publicDir));
+  app.use(express.static(path.join(process.cwd(), "public")));
 
   // 1. Health check — always available, no middleware dependencies
   app.use("/health", healthRouter);
