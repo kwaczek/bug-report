@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 Phase: 1 of 4 (Widget)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-03-01 — Roadmap created
+Last activity: 2026-03-01 — Roadmap created + integration-checked + fixed
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -60,5 +60,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Roadmap created — ready to plan Phase 1
+Stopped at: Project initialization complete — roadmap created, integration-checked, fixes applied. Ready to plan Phase 1.
 Resume file: None

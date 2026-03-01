@@ -43,7 +43,8 @@
 - [ ] **RALF-03**: Relay server exposed via Cloudflare Tunnel or ngrok for Railway reachability
 - [ ] **RALF-04**: Per-project job queue serializes fix_plan.md writes (no race conditions)
 - [ ] **RALF-05**: Issue-ID-based deduplication prevents duplicate fix_plan.md writes from webhook retries
-- [ ] **RALF-06**: Ralph detects fix_plan.md change and executes fix → commit → push → auto-deploy
+- [ ] **RALF-06**: Ralph detects fix_plan.md change and executes fix → commit → push → auto-deploy (precondition — verify Ralph --monitor behavior before implementation)
+- [ ] **RALF-07**: Relay server validates a shared secret from Railway before processing any request
 
 ### Telegram
 
@@ -103,10 +104,10 @@
 | BACK-06 | Phase 2 | Pending |
 | BACK-07 | Phase 2 | Pending |
 | BACK-08 | Phase 2 | Pending |
-| TRIA-01 | Phase 3 | Pending |
-| TRIA-02 | Phase 3 | Pending |
-| TRIA-03 | Phase 3 | Pending |
-| TRIA-04 | Phase 3 | Pending |
+| TRIA-01 | Phase 2 | Pending |
+| TRIA-02 | Phase 2 | Pending |
+| TRIA-03 | Phase 2 | Pending |
+| TRIA-04 | Phase 2 | Pending |
 | TRIA-05 | Phase 3 | Pending |
 | RALF-01 | Phase 3 | Pending |
 | RALF-02 | Phase 3 | Pending |
@@ -114,6 +115,7 @@
 | RALF-04 | Phase 3 | Pending |
 | RALF-05 | Phase 3 | Pending |
 | RALF-06 | Phase 3 | Pending |
+| RALF-07 | Phase 3 | Pending |
 | TELE-01 | Phase 4 | Pending |
 | TELE-02 | Phase 4 | Pending |
 | TELE-03 | Phase 4 | Pending |
@@ -122,8 +124,8 @@
 | TELE-06 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 34 total
-- Mapped to phases: 34
+- v1 requirements: 35 total
+- Mapped to phases: 35
 - Unmapped: 0
 
 ---
