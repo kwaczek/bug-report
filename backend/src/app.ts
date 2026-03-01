@@ -1,14 +1,21 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import { healthRouter } from "./routes/health.js";
 import { reportRouter } from "./routes/report.js";
 import { reportLimiter } from "./middleware/rateLimit.js";
 import { webhookMiddleware } from "./middleware/webhook.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 export function createApp() {
   const app = express();
 
   // Trust Railway's reverse proxy so express-rate-limit sees the real client IP
   app.set("trust proxy", 1);
+
+  // 0. Static files — serve widget.js from /public
+  app.use(express.static(path.join(__dirname, "..", "public")));
 
   // 1. Health check — always available, no middleware dependencies
   app.use("/health", healthRouter);
