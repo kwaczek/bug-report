@@ -54,7 +54,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Scaffold backend package, Express 5 app factory, shared TypeScript types, project config, health endpoint
+- [x] 02-01-PLAN.md — Scaffold backend package, Express 5 app factory, shared TypeScript types, project config, health endpoint
 - [ ] 02-02-PLAN.md — ImgBB upload service, Anthropic AI triage service, GitHub issue creation service
 - [ ] 02-03-PLAN.md — POST /report route handler, rate limiting, webhook HMAC middleware, full app wiring
 
@@ -91,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
-| 2. Backend + Triage | 0/3 plans | In progress | - |
+| 2. Backend + Triage | 1/3 plans | In progress | - |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |

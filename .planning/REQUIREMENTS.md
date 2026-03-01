@@ -19,14 +19,14 @@
 
 ### Backend
 
-- [ ] **BACK-01**: Express 5 service receives bug reports at POST /report
+- [x] **BACK-01**: Express 5 service receives bug reports at POST /report
 - [ ] **BACK-02**: Service uploads screenshots to ImgBB and embeds permanent URLs in issue body
 - [ ] **BACK-03**: Service rate-limits by IP (10 reports/IP/hour minimum)
-- [ ] **BACK-04**: Service maps project IDs to GitHub repos for correct issue routing
+- [x] **BACK-04**: Service maps project IDs to GitHub repos for correct issue routing
 - [ ] **BACK-05**: Service creates GitHub issues via Octokit with labels, screenshots, and metadata
 - [ ] **BACK-06**: Service registers and handles GitHub webhooks with HMAC signature verification
-- [ ] **BACK-07**: Service deploys to Railway with always-on configuration
-- [ ] **BACK-08**: Zero GitHub API calls originate from the browser — all through backend proxy
+- [x] **BACK-07**: Service deploys to Railway with always-on configuration
+- [x] **BACK-08**: Zero GitHub API calls originate from the browser — all through backend proxy
 
 ### Triage
 
@@ -96,14 +96,14 @@
 | WIDG-07 | Phase 1 | Complete |
 | WIDG-08 | Phase 1 | Complete |
 | WIDG-09 | Phase 1 | Complete |
-| BACK-01 | Phase 2 | Pending |
+| BACK-01 | Phase 2 | Complete (02-01) |
 | BACK-02 | Phase 2 | Pending |
 | BACK-03 | Phase 2 | Pending |
-| BACK-04 | Phase 2 | Pending |
+| BACK-04 | Phase 2 | Complete (02-01) |
 | BACK-05 | Phase 2 | Pending |
 | BACK-06 | Phase 2 | Pending |
-| BACK-07 | Phase 2 | Pending |
-| BACK-08 | Phase 2 | Pending |
+| BACK-07 | Phase 2 | Complete (02-01) |
+| BACK-08 | Phase 2 | Complete (02-01) |
 | TRIA-01 | Phase 2 | Pending |
 | TRIA-02 | Phase 2 | Pending |
 | TRIA-03 | Phase 2 | Pending |
@@ -130,4 +130,4 @@
 
 ---
 *Requirements defined: 2026-03-01*
-*Last updated: 2026-03-01 after initial definition*
+*Last updated: 2026-03-01 after 02-01 execution (BACK-01, BACK-04, BACK-07, BACK-08 complete)*
