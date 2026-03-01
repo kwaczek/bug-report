@@ -12,7 +12,7 @@ Four phases deliver a fully automated bug-to-fix pipeline. The widget ships firs
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Widget** - Embeddable script-tag widget with screenshot capture, Shadow DOM isolation, and graceful failure
+- [x] **Phase 1: Widget** - Embeddable script-tag widget with screenshot capture, Shadow DOM isolation, and graceful failure
 - [ ] **Phase 2: Backend + Triage** - Express 5 service on Railway with pre-issue AI triage, rate-limiting, and conditional GitHub issue creation
 - [ ] **Phase 3: Ralph Integration** - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring
 - [ ] **Phase 4: Telegram** - Human-in-the-loop approve/reject flow for uncertain triage verdicts
@@ -33,8 +33,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Scaffold widget package, Vite IIFE config, shared TypeScript types, and metadata collection
-- [ ] 01-02-PLAN.md — Core widget: Shadow DOM init, floating button, form UI, screenshot capture, upload/paste handler
-- [ ] 01-03-PLAN.md — FormData submission module, production build, and browser verification checkpoint
+- [x] 01-02-PLAN.md — Core widget: Shadow DOM init, floating button, form UI, screenshot capture, upload/paste handler
+- [x] 01-03-PLAN.md — FormData submission module, production build, and browser verification checkpoint
 
 ### Phase 2: Backend + Triage
 **Goal**: Bug reports submitted by the widget are triaged by AI before any GitHub issue is created — spam is silently discarded, valid/uncertain reports become properly labeled GitHub issues in the correct project repo
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Widget | 1/3 plans | In progress | - |
+| 1. Widget | 3/3 plans | Complete | 2026-03-01 |
 | 2. Backend + Triage | TBD | Not started | - |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |

@@ -14,7 +14,7 @@
 - [x] **WIDG-05**: Widget auto-fills current page URL in the report form
 - [x] **WIDG-06**: Widget supports multiple screenshots per report (upload + Ctrl+V paste)
 - [x] **WIDG-07**: Widget collects subject, description, URL, and browser/OS metadata
-- [ ] **WIDG-08**: Widget shows submission confirmation (success/failure) to reporter
+- [x] **WIDG-08**: Widget shows submission confirmation (success/failure) to reporter
 - [x] **WIDG-09**: Widget fails gracefully — host app is never affected by widget errors
 
 ### Backend
@@ -94,7 +94,7 @@
 | WIDG-05 | Phase 1 | Complete |
 | WIDG-06 | Phase 1 | Complete |
 | WIDG-07 | Phase 1 | Complete |
-| WIDG-08 | Phase 1 | Pending |
+| WIDG-08 | Phase 1 | Complete |
 | WIDG-09 | Phase 1 | Complete |
 | BACK-01 | Phase 2 | Pending |
 | BACK-02 | Phase 2 | Pending |
