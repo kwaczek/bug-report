@@ -29,7 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The form collects subject, description, and browser/OS metadata; the reporter sees a success or failure confirmation after submission
   4. Throwing an exception inside the widget or simulating a network failure does not break or alter the host page in any way
   5. Multiple screenshots can be attached per report via file upload or Ctrl+V paste
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold widget package, Vite IIFE config, shared TypeScript types, and metadata collection
+- [ ] 01-02-PLAN.md — Core widget: Shadow DOM init, floating button, form UI, screenshot capture, upload/paste handler
+- [ ] 01-03-PLAN.md — FormData submission module, production build, and browser verification checkpoint
 
 ### Phase 2: Backend + Triage
 **Goal**: Bug reports submitted by the widget are triaged by AI before any GitHub issue is created — spam is silently discarded, valid/uncertain reports become properly labeled GitHub issues in the correct project repo
@@ -80,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Widget | TBD | Not started | - |
+| 1. Widget | 3 plans | Not started | - |
 | 2. Backend + Triage | TBD | Not started | - |
 | 3. Ralph Integration | TBD | Not started | - |
 | 4. Telegram | TBD | Not started | - |
