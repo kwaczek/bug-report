@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { enqueue } from '../services/queue.js';
 import { isDuplicate, markSeen } from '../services/dedup.js';
-import { buildBugReportSection, appendToFixPlan, isProjectBusy } from '../services/fixplan.js';
+import { buildBugReportSection, appendToFixPlan } from '../services/fixplan.js';
 import { watchFix } from '../services/fix-watcher.js';
 import { resolveProjectDir } from '../services/project-resolver.js';
 import { analyzeBugAndCreatePlan } from '../services/claude-analyze.js';
@@ -50,22 +50,15 @@ fixRouter.post('/', async (req, res) => {
   markSeen(dedupeKey);
 
   // 4. Enqueue the async smart pipeline job
+  //    Queue is per-project — serializes Claude writes so two reports
+  //    for the same project don't race on fix_plan.md.
+  //    Always append the bug, only spawn Ralph if not already running.
   enqueue(data.repo, async () => {
     const projectDir = resolveProjectDir(data.repo);
 
-    // Check if Ralph is busy with an in-progress job before proceeding
-    const busy = await isProjectBusy(data.repo);
-    if (busy) {
-      console.warn(`[fix] project ${data.repo} has in-progress fix_plan.md — queuing delayed retry`);
-      await new Promise<void>((resolve) => setTimeout(resolve, 60_000));
-      const stillBusy = await isProjectBusy(data.repo);
-      if (stillBusy) {
-        console.error(`[fix] project ${data.repo} still busy after retry — skipping ${dedupeKey}`);
-        return;
-      }
-    }
-
-    // Step 1: Claude Code analyzes the bug and writes enriched fix_plan.md
+    // Step 1: Claude describes the bug and appends to fix_plan.md
+    //         Always runs — even if Ralph is busy with a previous fix.
+    //         Ralph reads fix_plan after each task, so it will pick up new items.
     console.log(`[fix] ▶ starting Claude analysis for ${dedupeKey}`);
     try {
       await analyzeBugAndCreatePlan(projectDir, data);
@@ -77,11 +70,12 @@ fixRouter.post('/', async (req, res) => {
       console.log(`[fix] appended fallback bug report to fix_plan.md for ${data.repo}`);
     }
 
-    // Step 2: Spawn Ralph to execute the fix
-    console.log(`[fix] ▶ spawning Ralph for ${data.repo}`);
+    // Step 2: Spawn Ralph only if not already running.
+    //         If Ralph is already working, it will see the new tasks
+    //         on its next loop iteration (reads fix_plan after each task).
     spawnRalph(projectDir, data.repo);
 
-    // Step 3: Start timeout watcher — relabels issue if Ralph stalls
+    // Step 3: Start timeout watcher for this specific issue
     watchFix(data.owner, data.repo, data.issueId, data.repo);
     console.log(`[fix] ▶ pipeline active for ${dedupeKey} — watcher started`);
   });
