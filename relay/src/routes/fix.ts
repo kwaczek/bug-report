@@ -4,6 +4,9 @@ import { enqueue } from '../services/queue.js';
 import { isDuplicate, markSeen } from '../services/dedup.js';
 import { buildFixPlan, writeFixPlan, isProjectBusy } from '../services/fixplan.js';
 import { watchFix } from '../services/fix-watcher.js';
+import { resolveProjectDir } from '../services/project-resolver.js';
+import { analyzeBugAndCreatePlan } from '../services/claude-analyze.js';
+import { spawnRalph } from '../services/ralph-runner.js';
 
 const FixRequestSchema = z.object({
   issueId: z.number(),
@@ -46,13 +49,14 @@ fixRouter.post('/', async (req, res) => {
   //    between isDuplicate check and actual write)
   markSeen(dedupeKey);
 
-  // 4. Enqueue the async fix_plan.md write job
+  // 4. Enqueue the async smart pipeline job
   enqueue(data.repo, async () => {
-    // Check if Ralph is busy with an in-progress job before writing
+    const projectDir = resolveProjectDir(data.repo);
+
+    // Check if Ralph is busy with an in-progress job before proceeding
     const busy = await isProjectBusy(data.repo);
     if (busy) {
       console.warn(`[fix] project ${data.repo} has in-progress fix_plan.md — queuing delayed retry`);
-      // Wait 60s then check again
       await new Promise<void>((resolve) => setTimeout(resolve, 60_000));
       const stillBusy = await isProjectBusy(data.repo);
       if (stillBusy) {
@@ -61,11 +65,25 @@ fixRouter.post('/', async (req, res) => {
       }
     }
 
-    const content = buildFixPlan(data);
-    await writeFixPlan(data.repo, content);
+    // Step 1: Claude Code analyzes the bug and writes enriched fix_plan.md
+    console.log(`[fix] ▶ starting Claude analysis for ${dedupeKey}`);
+    try {
+      await analyzeBugAndCreatePlan(projectDir, data);
+    } catch (err) {
+      console.error(`[fix] Claude analysis failed for ${dedupeKey}: ${err}`);
+      // Fallback: write the basic template so Ralph has something to work with
+      const content = buildFixPlan(data);
+      await writeFixPlan(data.repo, content);
+      console.log(`[fix] wrote fallback template fix_plan.md for ${data.repo}`);
+    }
 
-    // Start fix timeout watcher — relabels issue if Ralph stalls
+    // Step 2: Spawn Ralph to execute the fix
+    console.log(`[fix] ▶ spawning Ralph for ${data.repo}`);
+    spawnRalph(projectDir, data.repo);
+
+    // Step 3: Start timeout watcher — relabels issue if Ralph stalls
     watchFix(data.owner, data.repo, data.issueId, data.repo);
+    console.log(`[fix] ▶ pipeline active for ${dedupeKey} — watcher started`);
   });
 
   // 5. Return 202 immediately — do NOT await the queue
