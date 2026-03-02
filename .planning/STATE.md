@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 3 of 4 — IN PROGRESS
-Plan: 3 of 3 in phase 03 — AT CHECKPOINT (Task 3 human-verify)
-Status: Phase 3 code-complete. 03-03 Tasks 1+2 committed. Awaiting human verification of smart pipeline end-to-end.
-Last activity: 2026-03-02 — Completed 03-03 Tasks 1-2: smart relay pipeline (Claude Code → fix_plan.md → Ralph spawn).
+Plan: 3 of 3 in phase 03 — COMPLETE
+Status: Phase 3 fully complete. 03-03 all tasks done including post-checkpoint refinements. E2E verified with houbar issue #2.
+Last activity: 2026-03-02 — Completed 03-03: post-checkpoint refine (describe-only Claude, spam filter triage, screenshot download, always-append concurrent reports).
 
 Progress: [██████████] 100% (10/10 plans)
 
@@ -96,6 +96,11 @@ Recent decisions affecting current work:
 - [Phase 03-ralph-integration]: repo-map.json only stores mismatches — default folder name equals repo name for most projects
 - [Phase 03-ralph-integration]: Claude Code CLI tools constrained to Read/Glob/Grep/Write/WebFetch/Bash(ls,cat) — prevents unwanted side effects during analysis
 - [Phase 03-ralph-integration]: Template fix_plan fallback on Claude analysis failure — Ralph always has something to execute
+- [Phase 03-ralph-integration]: Claude role is DESCRIBE-ONLY — summarize bug for fix_plan, never analyze root cause; Ralph handles that with full codebase context
+- [Phase 03-ralph-integration]: Screenshots downloaded to temp files before Claude spawn so Read tool works (multimodal); cleaned up after Claude exits
+- [Phase 03-ralph-integration]: Removed isProjectBusy gate — always append new bug report; only skip Ralph spawn if already running
+- [Phase 03-ralph-integration]: Local spam filter replaces paid Anthropic API for triage — length < 10 chars = spam, everything else = auto-fix
+- [Phase 03-ralph-integration]: Claude spawned from ralph-workspace root to inherit CLAUDE.md bug report handling instructions
 
 ### Pending Todos
 
@@ -109,6 +114,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-02
-Stopped at: 03-03 Task 3 checkpoint (human-verify) — smart relay pipeline code complete. Start relay + tunnel, POST test payload, verify console logs + fix_plan.md quality.
+Last session: 2026-03-02T12:50Z
+Stopped at: Phase 3 complete. Ready to begin Phase 4 (Telegram approval flow).
 Resume file: None

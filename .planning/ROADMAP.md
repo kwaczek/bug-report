@@ -74,8 +74,8 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Backend triage logging (TRIA-05), relay notification service, webhook handler registration
-- [ ] 03-02-PLAN.md — Relay server package: scaffold, auth, dedup, queue, fix_plan.md writer, POST /fix route
-- [ ] 03-03-PLAN.md — Cloudflare Tunnel config, env documentation, end-to-end verification checkpoint
+- [x] 03-02-PLAN.md — Relay server package: scaffold, auth, dedup, queue, fix_plan.md writer, POST /fix route
+- [x] 03-03-PLAN.md — Smart relay pipeline: Claude Code bug description, screenshot multimodal, Ralph spawn, spam filter triage
 
 ### Phase 4: Telegram
 **Goal**: When triage assigns a bug to the review lane, Miro receives a Telegram notification with full context and inline Approve/Reject buttons; approving triggers the fix pipeline; rejecting closes the issue
