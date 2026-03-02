@@ -4,6 +4,7 @@ import { getRepo } from "../config.js";
 import { uploadScreenshots } from "../services/imgbb.js";
 import { triageReport } from "../services/triage.js";
 import { createGitHubIssue } from "../services/github.js";
+import { appendTriageLog } from "../services/triage-log.js";
 import type { BugMetadata, PendingApproval } from "../types.js";
 
 // In-memory store for reports that need human approval (verdict === "review")
@@ -77,6 +78,16 @@ reportRouter.post(
 
       // TRIA-03: Spam is discarded silently — 200 response, no GitHub issue
       if (triageResult.verdict === "spam") {
+        // TRIA-05: Log spam decisions with null issueId (no issue is created)
+        await appendTriageLog({
+          timestamp: new Date().toISOString(),
+          issueId: null,
+          owner: repo.owner,
+          repo: repo.repo,
+          verdict: triageResult.verdict,
+          confidence: triageResult.confidence,
+          reasoning: triageResult.reasoning,
+        });
         res.json({ success: true, message: "Report received" });
         return;
       }
@@ -94,6 +105,17 @@ reportRouter.post(
         screenshotUrls,
         metadata: parsedMetadata,
         triageResult,
+      });
+
+      // TRIA-05: Log auto-fix/review decisions with the actual issueId
+      await appendTriageLog({
+        timestamp: new Date().toISOString(),
+        issueId,
+        owner: repo.owner,
+        repo: repo.repo,
+        verdict: triageResult.verdict,
+        confidence: triageResult.confidence,
+        reasoning: triageResult.reasoning,
       });
 
       // --- Step 4: Store pending approval for "review" verdicts (Phase 4) ---
