@@ -5,10 +5,19 @@ import { createInterface } from 'node:readline';
 
 interface RalphStatus {
   status?: string;
+  timestamp?: string;
 }
 
+// If status.json hasn't been updated in this long, treat Ralph as dead.
+// Ralph's max per-call timeout is 20min; 30min without an update means it crashed.
+const STALE_THRESHOLD_MS = 30 * 60_000;
+
 /**
- * Checks if Ralph is already running for a project by reading status.json.
+ * Checks if Ralph is actually running for a project.
+ *
+ * Reads status.json and verifies the timestamp is recent. If Ralph crashed
+ * or was killed without updating status.json, the stale file would otherwise
+ * block all future spawns for that project permanently.
  */
 function isRalphRunning(projectDir: string): boolean {
   const statusPath = path.join(projectDir, '.ralph', 'status.json');
@@ -16,6 +25,15 @@ function isRalphRunning(projectDir: string): boolean {
     const raw = readFileSync(statusPath, 'utf8');
     const status = JSON.parse(raw) as RalphStatus;
     if (status.status === 'running' || status.status === 'executing') {
+      if (status.timestamp) {
+        const age = Date.now() - new Date(status.timestamp).getTime();
+        if (age > STALE_THRESHOLD_MS) {
+          console.warn(
+            `[ralph] status.json says "${status.status}" but last update was ${Math.round(age / 60_000)}min ago — treating as stale for ${projectDir}`
+          );
+          return false;
+        }
+      }
       return true;
     }
     return false;
