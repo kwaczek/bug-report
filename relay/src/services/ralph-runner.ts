@@ -1,7 +1,6 @@
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { createInterface } from 'node:readline';
 
 interface RalphStatus {
   status?: string;
@@ -64,25 +63,14 @@ export function spawnRalph(projectDir: string, repoName: string): void {
       '--calls', '50',
       '--timeout', '20',
       '--no-continue',
+      '--live',
     ],
     {
       cwd: projectDir,
       detached: true,
-      stdio: ['ignore', 'pipe', 'pipe'],
+      stdio: 'ignore',
     }
   );
-
-  // Pipe stdout line by line
-  const stdoutRl = createInterface({ input: ralph.stdout });
-  stdoutRl.on('line', (line) => {
-    console.log(`[ralph:${repoName}] ${line}`);
-  });
-
-  // Pipe stderr line by line
-  const stderrRl = createInterface({ input: ralph.stderr });
-  stderrRl.on('line', (line) => {
-    console.error(`[ralph:${repoName}] stderr: ${line}`);
-  });
 
   ralph.on('close', (code) => {
     console.log(`[ralph] exited for ${repoName} (code: ${code})`);
