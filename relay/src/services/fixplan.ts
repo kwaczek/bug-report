@@ -4,27 +4,36 @@ import type { RelayFixRequest } from '../types.js';
 import { resolveProjectDir } from './project-resolver.js';
 
 /**
- * Builds a fix_plan.md string in Ralph's verified format.
+ * Builds a bug report section to append to an existing fix_plan.md.
+ * Just describes the bug — does not analyze root cause.
  */
-export function buildFixPlan(req: RelayFixRequest): string {
+export function buildBugReportSection(req: RelayFixRequest): string {
+  const screenshots = req.reportData.screenshotUrls.length > 0
+    ? req.reportData.screenshotUrls.map((u) => `- ${u}`).join('\n')
+    : 'None provided';
+
   return [
-    `# Bug Fix: ${req.issueTitle}`,
+    '',
+    '---',
+    '',
+    `# Bug Report: ${req.issueTitle}`,
     '',
     `**Issue:** ${req.issueUrl}`,
-    `**Reported:** ${new Date().toISOString()}`,
+    `**Received:** ${new Date().toISOString()}`,
     `**Repo:** ${req.owner}/${req.repo}`,
     '',
-    '## Investigation',
-    `- [ ] Read the bug report at ${req.issueUrl} — understand the exact failure, reproduce steps, and identify affected code paths`,
+    '## What was reported',
+    req.reportData.description,
     '',
-    '## Implementation',
-    '- [ ] Identify the root cause in the codebase',
-    '- [ ] Implement the minimal fix — do not refactor unrelated code',
-    '- [ ] Run the test suite to verify no regressions',
+    '## Screenshots',
+    screenshots,
     '',
-    '## Delivery',
-    `- [ ] Commit the fix with message: "fix: ${req.issueTitle} (closes #${req.issueId})"`,
-    '- [ ] Push to main branch — Railway auto-deploys on push',
+    '## Fix Tasks',
+    `- [ ] Investigate the bug based on the report above — find the root cause in the codebase`,
+    '- [ ] Implement the minimal fix',
+    '- [ ] Run tests to verify no regressions',
+    `- [ ] Commit: "fix: ${req.issueTitle} (closes #${req.issueId})"`,
+    '- [ ] Push to main branch',
     '',
   ].join('\n');
 }
@@ -48,13 +57,22 @@ export async function isProjectBusy(repoName: string): Promise<boolean> {
 }
 
 /**
- * Writes fix_plan.md to the project's .ralph/ directory, creating the
- * directory if it does not exist.
+ * Appends content to the project's .ralph/fix_plan.md, creating the
+ * directory and file if they don't exist.
  */
-export async function writeFixPlan(repoName: string, content: string): Promise<void> {
+export async function appendToFixPlan(repoName: string, content: string): Promise<void> {
   const projectDir = resolveProjectDir(repoName);
   const dir = path.join(projectDir, '.ralph');
+  const filePath = path.join(dir, 'fix_plan.md');
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, 'fix_plan.md'), content, 'utf8');
-  console.log(`[fixplan] wrote fix_plan.md for ${repoName}`);
+
+  let existing = '';
+  try {
+    existing = await readFile(filePath, 'utf8');
+  } catch {
+    // File doesn't exist yet — that's fine
+  }
+
+  await writeFile(filePath, existing + content, 'utf8');
+  console.log(`[fixplan] appended bug report to fix_plan.md for ${repoName}`);
 }

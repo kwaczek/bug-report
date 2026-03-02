@@ -3,67 +3,71 @@ import type { RelayFixRequest } from '../types.js';
 
 const CLAUDE_TIMEOUT_MS = 10 * 60_000; // 10 minutes
 
-function buildPrompt(data: RelayFixRequest): string {
+const RALPH_WORKSPACE =
+  process.env.RALPH_WORKSPACE ?? '/Users/miro/Workspace/PERSONAL/ralph-workspace';
+
+function buildPrompt(data: RelayFixRequest, projectFolder: string): string {
   const screenshotSection =
     data.reportData.screenshotUrls.length > 0
-      ? `**Screenshots:**\n${data.reportData.screenshotUrls.map((u) => `- ${u}`).join('\n')}\nUse WebFetch to examine each screenshot.`
+      ? `**Screenshots:**\n${data.reportData.screenshotUrls.map((u) => `- ${u}`).join('\n')}\nUse WebFetch to examine each screenshot and describe what you see.`
       : '**Screenshots:** None provided';
 
-  return `You are a bug analyst for a live project. A user reported a bug.
+  return `A customer reported a bug. Your job is to DESCRIBE the bug clearly and append it to the project's fix_plan.md. Do NOT analyze root cause or suggest code changes — Ralph will handle that.
 
-**Bug:** ${data.issueTitle}
-**Issue:** ${data.issueUrl}
+**Bug Title:** ${data.issueTitle}
+**Issue URL:** ${data.issueUrl}
+**Subject:** ${data.reportData.subject}
 **Description:** ${data.reportData.description}
 ${screenshotSection}
-**AI Triage:** ${data.triageResult.reasoning} (confidence: ${data.triageResult.confidence})
+**AI Triage Notes:** ${data.triageResult.reasoning} (confidence: ${data.triageResult.confidence})
 
-Your task:
-1. If screenshots are provided, examine them with WebFetch to understand the visual bug
-2. Explore the project codebase — find the relevant files, understand the code paths involved
-3. Identify the likely root cause
-4. Write .ralph/fix_plan.md with your analysis and a fix checklist
+Steps:
+1. If screenshot URLs are provided, use WebFetch to view each one and note what you see
+2. Read the existing fix_plan at projects/${projectFolder}/.ralph/fix_plan.md
+3. APPEND the following section to the END of that file (keep all existing content intact):
 
-The fix_plan.md MUST follow this exact format:
+---
 
-# Bug Fix: ${data.issueTitle}
+# Bug Report: ${data.issueTitle}
 
 **Issue:** ${data.issueUrl}
-**Reported:** ${new Date().toISOString()}
+**Received:** ${new Date().toISOString()}
 **Repo:** ${data.owner}/${data.repo}
 
-## Root Cause Analysis
-[2-4 sentences: what's likely causing the bug, referencing specific files/functions]
+## What was reported
+[Summarize what the customer described in 2-3 sentences — use their words where helpful]
 
-## Investigation
-- [ ] [Specific file to check and what to look for — include file path]
-- [ ] [Another investigation step if needed]
+## Screenshots
+[Describe what you see in each screenshot, or "None provided"]
 
-## Implementation
-- [ ] [Specific change to make — include file path and what to change]
-- [ ] [Additional changes if needed]
-- [ ] Run the existing test suite to verify no regressions
-
-## Delivery
-- [ ] Commit the fix with message: "fix: ${data.issueTitle} (closes #${data.issueId})"
+## Fix Tasks
+- [ ] Investigate the bug based on the report above — find the root cause in the codebase
+- [ ] Implement the minimal fix
+- [ ] Run tests to verify no regressions
+- [ ] Commit: "fix: ${data.issueTitle} (closes #${data.issueId})"
 - [ ] Push to main branch
 
-Important:
-- Be SPECIFIC — reference actual file paths and function names from this codebase
-- Keep the checklist focused — 4-8 items total, not a generic template
-- The Root Cause Analysis section is critical — Ralph uses it to understand what to fix`;
+IMPORTANT:
+- APPEND to the end of the file — do not overwrite or remove existing content
+- Just DESCRIBE the bug — do not dig into code or suggest fixes
+- If screenshots exist, describe what you see visually (errors, blank screens, broken layouts, etc.)
+- Keep it concise — Ralph reads this and does the actual work`;
 }
 
 /**
- * Spawns Claude Code CLI to analyze a bug report and write an enriched
- * fix_plan.md with root cause analysis in the project directory.
+ * Spawns Claude Code CLI in the ralph-workspace root to describe a bug
+ * report and append it to the project's fix_plan.md.
  *
+ * Runs from ralph-workspace so Claude picks up workspace CLAUDE.md instructions.
  * Resolves when Claude exits 0, rejects on non-zero exit or timeout.
  */
 export function analyzeBugAndCreatePlan(
   projectDir: string,
   data: RelayFixRequest
 ): Promise<void> {
-  const prompt = buildPrompt(data);
+  // Extract folder name from absolute path for the prompt
+  const projectFolder = projectDir.split('/').pop() ?? data.repo;
+  const prompt = buildPrompt(data, projectFolder);
   const tag = `${data.owner}/${data.repo}#${data.issueId}`;
 
   console.log(`[claude-analyze] started for ${tag}`);
@@ -77,10 +81,10 @@ export function analyzeBugAndCreatePlan(
         '--output-format',
         'text',
         '--allowedTools',
-        'Read,Glob,Grep,Write,WebFetch,Bash(ls *),Bash(cat *)',
+        'Read,Edit,Write,WebFetch,Glob',
       ],
       {
-        cwd: projectDir,
+        cwd: RALPH_WORKSPACE,
         stdio: ['ignore', 'pipe', 'pipe'],
         env: { ...process.env, HOME: process.env.HOME },
       }
@@ -116,7 +120,7 @@ export function analyzeBugAndCreatePlan(
     claude.on('close', (code) => {
       clearTimeout(timeoutHandle);
       if (code === 0) {
-        console.log(`[claude-analyze] finished — fix_plan.md written for ${data.repo}`);
+        console.log(`[claude-analyze] finished — bug appended to fix_plan.md for ${data.repo}`);
         resolve();
       } else {
         const err = new Error(`claude exited with code ${code}`);

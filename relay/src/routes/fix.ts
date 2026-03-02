@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { enqueue } from '../services/queue.js';
 import { isDuplicate, markSeen } from '../services/dedup.js';
-import { buildFixPlan, writeFixPlan, isProjectBusy } from '../services/fixplan.js';
+import { buildBugReportSection, appendToFixPlan, isProjectBusy } from '../services/fixplan.js';
 import { watchFix } from '../services/fix-watcher.js';
 import { resolveProjectDir } from '../services/project-resolver.js';
 import { analyzeBugAndCreatePlan } from '../services/claude-analyze.js';
@@ -71,10 +71,10 @@ fixRouter.post('/', async (req, res) => {
       await analyzeBugAndCreatePlan(projectDir, data);
     } catch (err) {
       console.error(`[fix] Claude analysis failed for ${dedupeKey}: ${err}`);
-      // Fallback: write the basic template so Ralph has something to work with
-      const content = buildFixPlan(data);
-      await writeFixPlan(data.repo, content);
-      console.log(`[fix] wrote fallback template fix_plan.md for ${data.repo}`);
+      // Fallback: append basic bug report so Ralph has something to work with
+      const section = buildBugReportSection(data);
+      await appendToFixPlan(data.repo, section);
+      console.log(`[fix] appended fallback bug report to fix_plan.md for ${data.repo}`);
     }
 
     // Step 2: Spawn Ralph to execute the fix
