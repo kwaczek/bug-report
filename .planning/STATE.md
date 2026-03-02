@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: complete
-last_updated: "2026-03-01T19:41:31.698Z"
+status: unknown
+last_updated: "2026-03-02T09:48:39.792Z"
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 9
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** Bugs reported by users get fixed and deployed automatically without manual developer intervention — closing the loop from report to resolution.
-**Current focus:** v1 complete — deploy and test in production
+**Current focus:** Phase 3 Ralph Integration — relay server, fix_plan.md generation, auto-fix pipeline
 
 ## Current Position
 
-Phase: 2 of 2 (v1) — COMPLETE
-Plan: 4 of 4 in phase 02 — COMPLETE
-Status: v1 complete — Widget + Backend + Triage pipeline done. Phases 3-4 (Ralph, Telegram) deferred to v2.
-Last activity: 2026-03-01 — Completed 02-04: backend/railway.toml. v1 milestone closed.
+Phase: 3 of 4 — IN PROGRESS
+Plan: 2 of 3 in phase 03 — COMPLETE
+Status: Phase 3 underway. 03-01 and 03-02 complete. 03-03 (Cloudflare Tunnel + integration wiring) next.
+Last activity: 2026-03-02 — Completed 03-02: relay server with POST /fix, dedup, queue, fixplan writer, fix-watcher.
 
-Progress: [██████████] 100% (v1)
+Progress: [████████░░] 80% (8/10 plans)
 
 ## Performance Metrics
 
@@ -42,12 +42,14 @@ Progress: [██████████] 100% (v1)
 |-------|-------|-------|----------|
 | 01-widget | 3 | 25 min | 8.3 min |
 | 02-backend-triage | 4 | 8 min | 2.0 min |
+| 03-ralph-integration | 1 | 2 min | 2.0 min |
 
 **Recent Trend:**
 - Last 5 plans: 01-02 (3 min), 01-03 (20 min), 02-01 (2 min), 02-02 (2 min), 02-03 (3 min)
 - Trend: stable
 
 *Updated after each plan completion*
+| Phase 03-ralph-integration P02 | 3 | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -82,6 +84,13 @@ Recent decisions affecting current work:
 - [Phase 02-backend-triage]: pendingApprovals exported as module-level Map — simple in-process state for Phase 4 Telegram approval flow
 - [Phase 02-backend-triage]: railway.toml restartPolicyType = ON_FAILURE (not ALWAYS) — restarts on crashes, does not restart on clean SIGTERM during redeployment
 - [Phase 02-backend-triage]: railway.toml buildCommand = npm install only, no tsc build step — tsx handles TypeScript execution at runtime
+- [Phase 03-ralph-integration]: Two-point triage logging: spam with null issueId before early return; auto-fix/review with actual issueId after GitHub issue creation
+- [Phase 03-ralph-integration]: registerRelayWebhook() wrapped in try/catch at startup — missing GITHUB_WEBHOOK_SECRET causes warning, not crash
+- [Phase 03-ralph-integration]: relay.ts uses native fetch() (Node 18+ built-in) — no extra dependency
+- [Phase 03-ralph-integration]: Background retry fires as fire-and-forget Promise (.catch() guarded) to avoid blocking HTTP response pipeline
+- [Phase 03-ralph-integration]: Duplicate webhook deliveries return 200 (not 4xx) to prevent retry escalation from upstream systems
+- [Phase 03-ralph-integration]: Health route mounted before auth middleware — accessible without credentials for relay monitoring
+- [Phase 03-ralph-integration]: Per-project Promise-chain queue serializes fix_plan.md writes — no Redis or external queue needed
 
 ### Pending Todos
 
@@ -95,6 +104,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-01
-Stopped at: v1 milestone complete. Widget (Phase 1) + Backend/Triage (Phase 2) done. Deploy to Railway and test with real bug reports before considering v2 (Ralph automation, Telegram).
+Last session: 2026-03-02
+Stopped at: Completed 03-02-PLAN.md — relay server scaffold with POST /fix, dedup, queue, fixplan, fix-watcher. Next: 03-03 Cloudflare Tunnel + integration wiring.
 Resume file: None

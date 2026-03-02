@@ -73,7 +73,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Backend triage logging (TRIA-05), relay notification service, webhook handler registration
+- [x] 03-01-PLAN.md — Backend triage logging (TRIA-05), relay notification service, webhook handler registration
 - [ ] 03-02-PLAN.md — Relay server package: scaffold, auth, dedup, queue, fix_plan.md writer, POST /fix route
 - [ ] 03-03-PLAN.md — Cloudflare Tunnel config, env documentation, end-to-end verification checkpoint
 
@@ -98,5 +98,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
 | 2. Backend + Triage | 4/4 | Complete | 2026-03-01 |
-| 3. Ralph Integration *(v2)* | 0/3 | Planned | - |
+| 3. Ralph Integration *(v2)* | 1/3 | In Progress | - |
 | 4. Telegram *(v2)* | TBD | Deferred | - |
