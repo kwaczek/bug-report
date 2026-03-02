@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-02T09:48:39.792Z"
+last_updated: "2026-03-02T11:16:31.002Z"
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 3 of 4 — IN PROGRESS
-Plan: 2 of 3 in phase 03 — COMPLETE
-Status: Phase 3 underway. 03-01 and 03-02 complete. 03-03 (Cloudflare Tunnel + integration wiring) next.
-Last activity: 2026-03-02 — Completed 03-02: relay server with POST /fix, dedup, queue, fixplan writer, fix-watcher.
+Plan: 3 of 3 in phase 03 — AT CHECKPOINT (Task 3 human-verify)
+Status: Phase 3 code-complete. 03-03 Tasks 1+2 committed. Awaiting human verification of smart pipeline end-to-end.
+Last activity: 2026-03-02 — Completed 03-03 Tasks 1-2: smart relay pipeline (Claude Code → fix_plan.md → Ralph spawn).
 
-Progress: [█████████░] 90% (9/10 plans)
+Progress: [██████████] 100% (10/10 plans)
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Progress: [█████████░] 90% (9/10 plans)
 
 *Updated after each plan completion*
 | Phase 03-ralph-integration P02 | 3 | 3 tasks | 11 files |
+| Phase 03-ralph-integration P03 | 4 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,10 @@ Recent decisions affecting current work:
 - [Phase 03-ralph-integration]: Duplicate webhook deliveries return 200 (not 4xx) to prevent retry escalation from upstream systems
 - [Phase 03-ralph-integration]: Health route mounted before auth middleware — accessible without credentials for relay monitoring
 - [Phase 03-ralph-integration]: Per-project Promise-chain queue serializes fix_plan.md writes — no Redis or external queue needed
+- [Phase 03-ralph-integration]: notifyRelay() called fire-and-forget in report.ts — relay failure must not block HTTP response
+- [Phase 03-ralph-integration]: repo-map.json only stores mismatches — default folder name equals repo name for most projects
+- [Phase 03-ralph-integration]: Claude Code CLI tools constrained to Read/Glob/Grep/Write/WebFetch/Bash(ls,cat) — prevents unwanted side effects during analysis
+- [Phase 03-ralph-integration]: Template fix_plan fallback on Claude analysis failure — Ralph always has something to execute
 
 ### Pending Todos
 
@@ -105,5 +110,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 03-02-PLAN.md — relay server scaffold with POST /fix, dedup, queue, fixplan, fix-watcher. Next: 03-03 Cloudflare Tunnel + integration wiring.
+Stopped at: 03-03 Task 3 checkpoint (human-verify) — smart relay pipeline code complete. Start relay + tunnel, POST test payload, verify console logs + fix_plan.md quality.
 Resume file: None

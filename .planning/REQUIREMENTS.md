@@ -40,7 +40,7 @@
 
 - [x] **RALF-01**: Service generates fix_plan.md in Ralph's expected format for auto-fix verdicts
 - [x] **RALF-02**: Local relay server bridges Railway service to local Ralph workspace
-- [ ] **RALF-03**: Relay server exposed via Cloudflare Tunnel or ngrok for Railway reachability
+- [x] **RALF-03**: Relay server exposed via Cloudflare Tunnel or ngrok for Railway reachability
 - [x] **RALF-04**: Per-project job queue serializes fix_plan.md writes (no race conditions)
 - [x] **RALF-05**: Issue-ID-based deduplication prevents duplicate fix_plan.md writes from webhook retries
 - [x] **RALF-06**: Ralph detects fix_plan.md change and executes fix → commit → push → auto-deploy (precondition — verify Ralph --monitor behavior before implementation)
@@ -111,7 +111,7 @@
 | TRIA-05 | Phase 3 | Complete (03-01) |
 | RALF-01 | Phase 3 | Complete |
 | RALF-02 | Phase 3 | Complete |
-| RALF-03 | Phase 3 | Pending |
+| RALF-03 | Phase 3 | Complete |
 | RALF-04 | Phase 3 | Complete |
 | RALF-05 | Phase 3 | Complete |
 | RALF-06 | Phase 3 | Complete |

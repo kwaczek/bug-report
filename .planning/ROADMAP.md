@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Widget** - Embeddable script-tag widget with screenshot capture, Shadow DOM isolation, and graceful failure
 - [x] **Phase 2: Backend + Triage** - Express 5 service on Railway with pre-issue AI triage, rate-limiting, and conditional GitHub issue creation (completed 2026-03-01)
-- [ ] **Phase 3: Ralph Integration** *(v2)* - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring
+- [x] **Phase 3: Ralph Integration** *(v2)* - Local relay server, fix_plan.md generation, job queue, and auto-fix pipeline wiring (completed 2026-03-02)
 - [ ] **Phase 4: Telegram** *(v2)* - Human-in-the-loop approve/reject flow for uncertain triage verdicts
 
 ## Phase Details
@@ -98,5 +98,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Widget | 3/3 plans | Complete | 2026-03-01 |
 | 2. Backend + Triage | 4/4 | Complete | 2026-03-01 |
-| 3. Ralph Integration *(v2)* | 1/3 | In Progress | - |
+| 3. Ralph Integration *(v2)* | 3/3 | Complete   | 2026-03-02 |
 | 4. Telegram *(v2)* | TBD | Deferred | - |
