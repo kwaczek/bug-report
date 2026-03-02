@@ -2,9 +2,20 @@ import "dotenv/config";
 import { createApp } from "./app.js";
 import { loadProjectsFromEnv, getAllRepos } from "./config.js";
 import { ensureLabelsExist } from "./services/github.js";
+import { registerRelayWebhook } from "./services/relay.js";
 
 // Load project mappings from PROJECT_MAP env var at startup
 loadProjectsFromEnv();
+
+// Register Phase 3 webhook handler for auto-fix relay notifications.
+// Wrapped in try/catch — if GITHUB_WEBHOOK_SECRET is not set the server
+// still starts; relay notifications will be unavailable until the secret
+// is configured and the server is restarted.
+try {
+  registerRelayWebhook();
+} catch (err) {
+  console.warn(`[startup] relay webhook not registered: ${err}`);
+}
 
 const app = createApp();
 const port = process.env.PORT ?? 3000;
