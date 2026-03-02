@@ -5,6 +5,7 @@ import { uploadScreenshots } from "../services/imgbb.js";
 import { triageReport } from "../services/triage.js";
 import { createGitHubIssue } from "../services/github.js";
 import { appendTriageLog } from "../services/triage-log.js";
+import { notifyRelay } from "../services/relay.js";
 import type { BugMetadata, PendingApproval } from "../types.js";
 
 // In-memory store for reports that need human approval (verdict === "review")
@@ -118,7 +119,32 @@ reportRouter.post(
         reasoning: triageResult.reasoning,
       });
 
-      // --- Step 4: Store pending approval for "review" verdicts (Phase 4) ---
+      // --- Step 4: Notify relay directly for auto-fix verdicts (PRIMARY path) ---
+      // This fires with full screenshotUrls — the webhook fallback may also fire
+      // but dedup in the relay handles duplicate delivery for the same issue.
+      if (triageResult.verdict === "auto-fix") {
+        notifyRelay({
+          issueId,
+          issueUrl,
+          issueTitle: subject,
+          owner: repo.owner,
+          repo: repo.repo,
+          triageResult: {
+            verdict: "auto-fix",
+            confidence: triageResult.confidence,
+            reasoning: triageResult.reasoning,
+          },
+          reportData: {
+            subject,
+            description,
+            screenshotUrls,
+          },
+        });
+        // Fire-and-forget — notifyRelay never throws
+        console.log(`[report] notified relay for auto-fix issue #${issueId}`);
+      }
+
+      // --- Step 5: Store pending approval for "review" verdicts (Phase 4) ---
       if (triageResult.verdict === "review") {
         const approval: PendingApproval = {
           issueId,
@@ -139,7 +165,7 @@ reportRouter.post(
         `[report] created issue #${issueId} (${triageResult.verdict}): ${issueUrl}`,
       );
 
-      // --- Step 5: Respond ---
+      // --- Step 6: Respond ---
       res.json({ success: true, message: "Report submitted" });
     } catch (err) {
       console.error(`[report] pipeline error: ${err}`);

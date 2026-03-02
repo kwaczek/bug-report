@@ -1,9 +1,7 @@
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { RelayFixRequest } from '../types.js';
-
-const RALPH_WORKSPACE =
-  process.env.RALPH_WORKSPACE ?? '/Users/miro/Workspace/PERSONAL/ralph-workspace';
+import { resolveProjectDir } from './project-resolver.js';
 
 /**
  * Builds a fix_plan.md string in Ralph's verified format.
@@ -37,19 +35,14 @@ export function buildFixPlan(req: RelayFixRequest): string {
  * file does not exist or all items are checked off.
  */
 export async function isProjectBusy(repoName: string): Promise<boolean> {
-  const fixPlanPath = path.join(
-    RALPH_WORKSPACE,
-    'projects',
-    repoName,
-    '.ralph',
-    'fix_plan.md'
-  );
   try {
+    const projectDir = resolveProjectDir(repoName);
+    const fixPlanPath = path.join(projectDir, '.ralph', 'fix_plan.md');
     const content = await readFile(fixPlanPath, 'utf8');
     const uncompletedCount = (content.match(/^\s*- \[ \]/gm) ?? []).length;
     return uncompletedCount > 0;
   } catch {
-    // File does not exist — project is not busy
+    // File does not exist or project dir not found — project is not busy
     return false;
   }
 }
@@ -59,7 +52,8 @@ export async function isProjectBusy(repoName: string): Promise<boolean> {
  * directory if it does not exist.
  */
 export async function writeFixPlan(repoName: string, content: string): Promise<void> {
-  const dir = path.join(RALPH_WORKSPACE, 'projects', repoName, '.ralph');
+  const projectDir = resolveProjectDir(repoName);
+  const dir = path.join(projectDir, '.ralph');
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, 'fix_plan.md'), content, 'utf8');
   console.log(`[fixplan] wrote fix_plan.md for ${repoName}`);
