@@ -1,0 +1,22 @@
+{
+  "name": "bug-report-relay",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node --import tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "zod": "^3.0.0",
+    "dotenv": "^16.0.0",
+    "@octokit/rest": "^21.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
