@@ -7,6 +7,7 @@ export interface RelayFixPayload {
   issueTitle: string;
   owner: string;
   repo: string;
+  mode: 'ralph' | 'gsd';
   triageResult: {
     verdict: "auto-fix";
     confidence: number;
@@ -142,6 +143,7 @@ export function registerRelayWebhook(): void {
         issueTitle,
         owner,
         repo,
+        mode: 'ralph',
         triageResult: {
           verdict: "auto-fix",
           confidence: 1.0,

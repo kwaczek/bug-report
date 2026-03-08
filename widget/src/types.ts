@@ -23,6 +23,7 @@ export interface SubmitArgs {
   metadata: BugMetadata;
   autoScreenshot: Blob | null;
   attachedImages: Blob[];
+  mode: 'ralph' | 'gsd';
 }
 
 export interface SubmitResult {

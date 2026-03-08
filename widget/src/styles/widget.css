@@ -163,3 +163,36 @@
 }
 .brw-state-success { color: #16a34a; }
 .brw-state-error   { color: #dc2626; }
+
+/* Mode toggle */
+.brw-mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.brw-mode-option {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.brw-mode-option:first-child {
+  border-right: 1px solid #d1d5db;
+}
+.brw-mode-option:hover {
+  background: #f9fafb;
+}
+.brw-mode-option[aria-pressed="true"] {
+  background: #ef4444;
+  color: #fff;
+}
+.brw-mode-option[aria-pressed="true"]:hover {
+  background: #dc2626;
+}

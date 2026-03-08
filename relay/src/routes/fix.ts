@@ -7,6 +7,7 @@ import { watchFix } from '../services/fix-watcher.js';
 import { resolveProjectDir } from '../services/project-resolver.js';
 import { analyzeBugAndCreatePlan } from '../services/claude-analyze.js';
 import { spawnRalph } from '../services/ralph-runner.js';
+import { spawnGsdTodo } from '../services/gsd-todo.js';
 
 const FixRequestSchema = z.object({
   issueId: z.number(),
@@ -14,6 +15,7 @@ const FixRequestSchema = z.object({
   issueTitle: z.string().min(1),
   owner: z.string().min(1),
   repo: z.string().min(1),
+  mode: z.enum(['ralph', 'gsd']).default('ralph'),
   triageResult: z.object({
     verdict: z.literal('auto-fix'),
     confidence: z.number().min(0).max(1),
@@ -56,28 +58,27 @@ fixRouter.post('/', async (req, res) => {
   enqueue(data.repo, async () => {
     const projectDir = resolveProjectDir(data.repo);
 
-    // Step 1: Claude describes the bug and appends to fix_plan.md
-    //         Always runs — even if Ralph is busy with a previous fix.
-    //         Ralph reads fix_plan after each task, so it will pick up new items.
-    console.log(`[fix] ▶ starting Claude analysis for ${dedupeKey}`);
-    try {
-      await analyzeBugAndCreatePlan(projectDir, data);
-    } catch (err) {
-      console.error(`[fix] Claude analysis failed for ${dedupeKey}: ${err}`);
-      // Fallback: append basic bug report so Ralph has something to work with
-      const section = buildBugReportSection(data);
-      await appendToFixPlan(data.repo, section);
-      console.log(`[fix] appended fallback bug report to fix_plan.md for ${data.repo}`);
+    if (data.mode === 'gsd') {
+      // GSD path: spawn Claude to add a todo — no fix_plan, no Ralph
+      console.log(`[fix] ▶ GSD todo path for ${dedupeKey}`);
+      spawnGsdTodo(projectDir, data);
+      console.log(`[fix] ▶ GSD todo spawned for ${dedupeKey}`);
+    } else {
+      // Ralph path: existing flow
+      console.log(`[fix] ▶ starting Claude analysis for ${dedupeKey}`);
+      try {
+        await analyzeBugAndCreatePlan(projectDir, data);
+      } catch (err) {
+        console.error(`[fix] Claude analysis failed for ${dedupeKey}: ${err}`);
+        const section = buildBugReportSection(data);
+        await appendToFixPlan(data.repo, section);
+        console.log(`[fix] appended fallback bug report to fix_plan.md for ${data.repo}`);
+      }
+
+      spawnRalph(projectDir, data.repo);
+      watchFix(data.owner, data.repo, data.issueId, data.repo);
+      console.log(`[fix] ▶ pipeline active for ${dedupeKey} — watcher started`);
     }
-
-    // Step 2: Spawn Ralph only if not already running.
-    //         If Ralph is already working, it will see the new tasks
-    //         on its next loop iteration (reads fix_plan after each task).
-    spawnRalph(projectDir, data.repo);
-
-    // Step 3: Start timeout watcher for this specific issue
-    watchFix(data.owner, data.repo, data.issueId, data.repo);
-    console.log(`[fix] ▶ pipeline active for ${dedupeKey} — watcher started`);
   });
 
   // 5. Return 202 immediately — do NOT await the queue

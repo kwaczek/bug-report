@@ -33,11 +33,12 @@ reportRouter.post(
   async (req, res): Promise<void> => {
     try {
       // --- Field extraction ---
-      const { projectId, subject, description } = req.body as {
+      const { projectId, subject, description, mode } = req.body as {
         projectId?: string;
         subject?: string;
         description?: string;
         metadata?: string;
+        mode?: string;
       };
 
       if (!projectId || !subject || !description) {
@@ -129,6 +130,7 @@ reportRouter.post(
           issueTitle: subject,
           owner: repo.owner,
           repo: repo.repo,
+          mode: mode === 'gsd' ? 'gsd' : 'ralph',
           triageResult: {
             verdict: "auto-fix",
             confidence: triageResult.confidence,

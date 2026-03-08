@@ -117,6 +117,40 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
     descField.appendChild(descTextarea);
     panel.appendChild(descField);
 
+    // Mode toggle
+    const modeField = el('div', { className: 'brw-field' });
+    const modeLabel = el('label', { className: 'brw-label' }, 'Fix type');
+    const modeToggle = el('div', { className: 'brw-mode-toggle' });
+    const modeQuick = el('button', {
+      className: 'brw-mode-option',
+      type: 'button',
+      'aria-pressed': 'true',
+    }, 'Quick fix');
+    const modeInvestigate = el('button', {
+      className: 'brw-mode-option',
+      type: 'button',
+      'aria-pressed': 'false',
+    }, 'Needs investigation');
+
+    let selectedMode: 'ralph' | 'gsd' = 'ralph';
+
+    modeQuick.addEventListener('click', () => {
+      selectedMode = 'ralph';
+      modeQuick.setAttribute('aria-pressed', 'true');
+      modeInvestigate.setAttribute('aria-pressed', 'false');
+    });
+    modeInvestigate.addEventListener('click', () => {
+      selectedMode = 'gsd';
+      modeQuick.setAttribute('aria-pressed', 'false');
+      modeInvestigate.setAttribute('aria-pressed', 'true');
+    });
+
+    modeToggle.appendChild(modeQuick);
+    modeToggle.appendChild(modeInvestigate);
+    modeField.appendChild(modeLabel);
+    modeField.appendChild(modeToggle);
+    panel.appendChild(modeField);
+
     // URL (pre-filled — WIDG-05)
     const urlField = el('div', { className: 'brw-field' });
     const urlLabel = el('label', { className: 'brw-label' }, 'Page URL');
@@ -174,7 +208,7 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
         (subjectInput as HTMLInputElement).focus();
         return;
       }
-      handleSubmit(subject, description).catch((err: unknown) => {
+      handleSubmit(subject, description, selectedMode).catch((err: unknown) => {
         console.warn('[bug-report-widget] handleSubmit threw:', err);
       });
     });
@@ -214,7 +248,7 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
     autoScreenshot = null;
   }
 
-  async function handleSubmit(subject: string, description: string): Promise<void> {
+  async function handleSubmit(subject: string, description: string, mode: 'ralph' | 'gsd'): Promise<void> {
     const { submitReport } = await import('./submit.js');
     state = 'submitting';
     renderPanel();
@@ -228,6 +262,7 @@ export function createWidget(shadowRoot: ShadowRoot, config: WidgetConfig): void
       metadata,
       autoScreenshot,
       attachedImages: uploadHandler.getImages(),
+      mode,
     }).catch((err: unknown) => {
       console.warn('[bug-report-widget] submitReport threw unexpectedly:', err);
       return { ok: false, message: 'Unexpected error' };

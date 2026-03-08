@@ -4,6 +4,7 @@ export interface RelayFixRequest {
   issueTitle: string;
   owner: string;
   repo: string;
+  mode: 'ralph' | 'gsd';
   triageResult: {
     verdict: 'auto-fix';
     confidence: number;

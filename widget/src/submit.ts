@@ -8,6 +8,7 @@ export async function submitReport({
   metadata,
   autoScreenshot,
   attachedImages,
+  mode,
 }: SubmitArgs): Promise<SubmitResult> {
   try {
     const form = new FormData();
@@ -15,6 +16,7 @@ export async function submitReport({
     form.append('subject', subject);
     form.append('description', description);
     form.append('metadata', JSON.stringify(metadata));
+    form.append('mode', mode);
 
     if (autoScreenshot) {
       form.append('screenshots', autoScreenshot, 'screenshot-auto.jpg');
